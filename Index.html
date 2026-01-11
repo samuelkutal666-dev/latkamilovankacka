@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje stránka</title>
+
+    <style>
+        body {
+            background-color: pink;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .sipka {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+            background-color: white;
+            border: 3px solid #ff66aa;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .sipka::after {
+            content: "";
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 25px solid transparent;
+            border-bottom: 25px solid transparent;
+            border-left: 30px solid white;
+        }
+
+        .submenu {
+            display: none;
+            margin-left: 20px;
+        }
+
+        .submenu button {
+            display: block;
+            width: 90%;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .uplet1 { background-color: #ffcccc; }
+        .uplet2 { background-color: #ccffcc; }
+
+        .tepl1 { background-color: #ccccff; }
+        .tepl2 { background-color: #ffffcc; }
+
+        #gallery {
+            text-align: center;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: scroll;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        #gallery img {
+            width: 300px;
+            margin: 15px;
+            border-radius: 15px;
+        }
+
+        /* 📱 ZVĚTŠENÍ PRO MOBIL */
+        @media (max-width: 600px) {
+            .submenu button {
+                font-size: 26px;
+                padding: 20px;
+                width: 100%;
+            }
+
+            .sipka {
+                font-size: 28px;
+                padding: 25px;
+            }
+
+            #gallery img {
+                width: 90%;
+            }
+        }
+    </style>
+
+    <script>
+        const SPRAVNE_HESLO = "0859";
+
+        function overHeslo() {
+            const zadane = prompt("Zadej heslo:");
+            if (zadane === SPRAVNE_HESLO) {
+                document.getElementById("obsah").style.display = "block";
+            } else {
+                alert("Špatné heslo. Nepustíme vás k webu.");
+            }
+        }
+
+        function toggleMenu(id) {
+            const menu = document.getElementById(id);
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        function showImages(event) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = ""; 
+
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(files[i]);
+                gallery.appendChild(img);
+            }
+        }
+
+        /* ⭐ PŘEPÍNAČ OTEVŘÍT/ZAVŘÍT JEDNOBAREVNÉ ÚPLETY */
+        let upletOtevreny = false;
+
+        function zobrazUpletJednobarevne() {
+            const gallery = document.getElementById('gallery');
+
+            if (upletOtevreny) {
+                gallery.innerHTML = "";
+                upletOtevreny = false;
+                return;
+            }
+
+            gallery.innerHTML = `
+                <div><img src="cervena.jpeg"><p>Červená</p></div>
+                <div><img src="bila.jpeg"><p>Bílá</p></div>
+                <div><img src="oranzovozluta.jpeg"><p>Oranžovo‑žlutá</p></div>
+                <div><img src="modrozelena.jpeg"><p>Modro‑zelená</p></div>
+                <div><img src="svetleruzova.jpeg"><p>Světle růžová</p></div>
+                <div><img src="hneda.jpeg"><p>Hnědá</p></div>
+                <div><img src="bila2.jpeg"><p>Bílá (2. varianta)</p></div>
+                <div><img src="hneda2.jpeg"><p>Hnědá (2. varianta)</p></div>
+                <div><img src="fialova.jpeg"><p>Fialová</p></div>
+                <div><img src="seda.jpeg"><p>Šedá</p></div>
+                <div><img src="cerna.jpeg"><p>Černá</p></div>
+                <div><img src="ruzova.jpeg"><p>Růžová</p></div>
+                <div><img src="tmavemodra.jpeg"><p>Tmavě modrá</p></div>
+                <div><img src="ruzovocervena.jpeg"><p>Růžovo‑červená</p></div>
+            `;
+
+            upletOtevreny = true;
+        }
+
+        window.onload = overHeslo;
+    </script>
+</head>
+<body>
+
+    <div id="obsah" style="display:none;">
+
+        <img src="ikona.jpg" alt="Ikona" width="120">
+
+        <button class="sipka" onclick="toggleMenu('upletMenu')">Úplet</button>
+
+        <div id="upletMenu" class="submenu">
+            <button class="uplet1" onclick="zobrazUpletJednobarevne()">jednobarevně</button>
+            <button class="uplet2" onclick="document.getElementById('fileInput').click()">Tisk</button>
+        </div>
+
+        <button class="sipka" onclick="toggleMenu('teplMenu')">Teplákoviny</button>
+
+        <div id="teplMenu" class="submenu">
+            <button class="tepl1">jednobarevně</button>
+            <button class="tepl2" onclick="document.getElementById('fileInput').click()">Tisk</button>
+        </div>
+
+        <button class="sipka">Jiné</button>
+
+        <input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="showImages(event)">
+
+        <div id="gallery"></div>
+
+    </div>
+
+</body>
+</html>
+
